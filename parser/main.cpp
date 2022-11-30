@@ -1,5 +1,10 @@
 #include <iostream>
+#include "./modules/descent-parser/parse.config.hpp"
 
 int main(void) {
-	std::cout << "hello" << std::endl; 
+	try {
+		descentParser();
+	} catch (std::exception &e) {
+		std::cout << e.what() /* the actual fuck */ << std::endl;
+	}
 }

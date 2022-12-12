@@ -33,4 +33,5 @@ class Config {
 
 		// other methods
 		void printConfig() const;
+		void clearConfig();
 };

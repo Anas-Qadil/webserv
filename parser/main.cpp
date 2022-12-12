@@ -7,7 +7,11 @@ int main(int argc, char **argv) {
 		if (argc != 2) {
 			throw std::runtime_error("Usage: ./parser <config file>");
 		}
-		grapServers(readFile(argv[1]));
+		std::string content = readFile(argv[1]);
+		analyze(content);
+		// loadingConfig();
+		std::cout << content << std::endl;
+		// grapServers(content);
 	} catch (std::exception &e) {
 		std::cout << e.what() /* the actual fuck */ << std::endl;
 	}

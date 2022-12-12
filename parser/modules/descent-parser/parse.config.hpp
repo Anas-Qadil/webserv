@@ -5,3 +5,4 @@
 #include "../config-data/config.class.hpp"
 
 std::vector<Config> descentParser();
+void loadingConfig();

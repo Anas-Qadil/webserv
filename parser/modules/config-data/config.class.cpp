@@ -93,5 +93,5 @@ void Config::clearConfig() {
 }
 
 Config::~Config() {
-	std::cout << "Config destructor called" << std::endl;
+	// std::cout << "Config destructor called" << std::endl;
 }

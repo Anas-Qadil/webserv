@@ -1,16 +1,5 @@
 #include "utils.hpp"
 
-const std::vector<std::string> grapServers(std::string content) {
-	// std::cout << content << std::endl;
-	unsigned first = content.find("server {");
-	unsigned last = content.find("};");
-	std::string strNew = content.substr(first + first, last - (first * 2));
-
-	std::cout << strNew << std::endl;
-
-	return std::vector<std::string>();
-}
-
 const std::string readFile(std::string path) {
 	std::ifstream file(path);
 	std::string line;
@@ -100,6 +89,11 @@ void analyze(std::string &content) {
 	// check if there is a client_max_body_size directive
 	if (content.find("client_max_body_size") == std::string::npos)
 		throw std::runtime_error("Error: config file must have at least one client_max_body_size directive");
+	// remove "http\n{" from the content
+	content.erase(0, 6);
+	if (content[0] == '\n') content.erase(0, 1);
+	// remove "};\n" from the content
+	content.erase(content.length() - 3, 3);
 	// if u rememberd any test case add it here :) ===>
 	// .....
 }

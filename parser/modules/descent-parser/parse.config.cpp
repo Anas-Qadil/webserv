@@ -14,8 +14,14 @@ std::vector<Config> descentParser(const std::string path)
 	// print serversData
 	for (size_t i = 0; i < serversData.size(); i++) {
 		Config server = parseServer(serversData[i]);
+		servers.push_back(server);
 	}
 
+	// loops to print servers
+	for (size_t i = 0; i < servers.size(); i++) {
+		servers[i].print();
+	}
+	// servers[0].print();
 
 	return (servers);
 }
@@ -196,7 +202,7 @@ void parseServerContent(std::string &content, Config &server) {
 	analyzeServerContent(content);
 	// split content into lines
 	std::cout << content << std::endl;
-	std::cout << " ------------------ " << std::endl;
+	std::cout << "-----------------------------------------" << std::endl;
 	for (size_t i = 0; i < content.length(); i++) {
 		line = getLine(content);
 		if (line.length() == 0) continue ;
@@ -206,12 +212,16 @@ void parseServerContent(std::string &content, Config &server) {
 		} else if (line.find("server_name") != std::string::npos) {
 			std::vector<std::string> serverNames = getServerNames(line.substr(line.find("server_name") + 12));
 			server.setServerName(serverNames);
-			// print server names
-			for (size_t i = 0; i < serverNames.size(); i++) {
-				std::cout << serverNames[i] << std::endl;
-			}
+		} else if (line.find("host") != std::string::npos) {
+			std::string hostname = getHostname(line.substr(line.find("host") + 5));
+			server.setHost(hostname);
+		} else if (line.find("client_max_body_size") != std::string::npos) {
+			int clientMaxBodySize = getClientMaxBodySize(line.substr(line.find("client_max_body_size") + 21));
+			server.setClientMaxBodySize(clientMaxBodySize);
+		} else if (line.find("root") != std::string::npos) {
+			std::string root = getServerRoot(line.substr(line.find("root") + 5));
+			server.setRoot(root);
 		}
-		// parse the next element in th file tomorrow here ====>
 	}
 }
 
@@ -255,4 +265,50 @@ bool analyzeRepeatedElements(std::vector<std::string> elements) {
 		}
 	}
 	return (true);
+}
+
+void analyzeHostname(std::string &hostname) {
+	// validate hostname here ======>
+}
+
+std::string getHostname(std::string line) {
+	std::string hostname = line;
+	analyzeHostname(hostname);
+	return (hostname);
+}
+
+void analyzeClientMaxBodySize(std::string &clientMaxBodySize) {
+	// validate client max body size here ======>
+}
+
+void analyzeServerRoot(std::string &serverRoot) {
+	// validate server root here ======>
+}
+
+int getClientMaxBodySize(std::string line) {
+	try {
+		analyzeClientMaxBodySize(line);
+		int clientMaxBodySize = 0;
+		// check if client max body size is a number
+		for (size_t i = 0; i < line.length(); i++) {
+			if (!isdigit(line[i])) throw std::runtime_error("Error: Client max body size is not a number");
+		}
+		clientMaxBodySize = std::stoi(line);
+		// check if client max body size is valid
+		if (clientMaxBodySize < 0) throw std::runtime_error("Error: Client max body size is negative");
+		return (clientMaxBodySize);
+	} catch (std::exception &e) {
+		throw std::runtime_error("Error: Client max body size is not a valid number");
+	}
+}
+
+std::string getServerRoot(std::string line) {
+	std::string root = line;
+	analyzeServerRoot(root);
+	// check if root is valid
+	if (root.length() == 0) throw std::runtime_error("Error: No root path found");
+	if (root[0] == ' ') root.erase(0, 1);
+	if (root[root.length() - 1] == ' ') root.erase(root.length() - 1, 1);
+	if (root[root.length() - 1] != '/') root += '/';
+	return (root);
 }

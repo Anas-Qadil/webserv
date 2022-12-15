@@ -61,11 +61,9 @@ void Config::setRoot(std::string root) {
 }
 
 // other methods
-void Config::printConfig() const {
-	std::cout << "Config:" << std::endl;
+void Config::print() const {
+	std::cout << "--------------------- Server Config ---------------------" << std::endl;
 	// when location is implemented, uncomment this
-	std::cout << "Location: ";  
-	this->location.printLocation();
 	// loop through port vector
 	std::cout << "port: ";
 	for (std::vector<int>::const_iterator it = this->port.begin(); it != this->port.end(); ++it) {
@@ -81,9 +79,12 @@ void Config::printConfig() const {
 	std::cout << "host: " << this->host << std::endl;
 	std::cout << "client_max_body_size: " << this->client_max_body_size << std::endl;
 	std::cout << "root: " << this->root << std::endl;
+	std::cout << "---------------------- Location -------------------------" << std::endl;
+	this->location.printLocation();
+	std::cout << "---------------------------------------------------------" << std::endl;
 }
 
-void Config::clearConfig() {
+void Config::clear() {
 	this->location = Location();
 	this->port.clear();
 	this->server_name.clear();

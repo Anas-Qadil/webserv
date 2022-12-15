@@ -19,3 +19,6 @@ void parseLocationContent(std::string &content, Config &location);
 std::vector<std::string> getServerNames(std::string serverNames);
 void analyzeServerNames(std::vector<std::string> serverNames);
 bool analyzeRepeatedElements(std::vector<std::string> elements);
+std::string getHostname(std::string line);
+int getClientMaxBodySize(std::string line);
+std::string getServerRoot(std::string line);

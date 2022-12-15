@@ -32,6 +32,6 @@ class Config {
 		void setRoot(std::string root);
 
 		// other methods
-		void printConfig() const;
-		void clearConfig();
+		void print() const;
+		void clear();
 };

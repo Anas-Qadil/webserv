@@ -1,10 +1,13 @@
 #include <iostream>
 #include <vector>
 #include "../location/location.class.hpp"
+#include <map>
+
 
 class Config {
 	private:
-		Location location;
+		// Location location;
+		std::map<std::string, Location> location;
 		std::vector<int> port;
 		std::vector<std::string> server_name;
 		std::string host;
@@ -16,7 +19,7 @@ class Config {
 		Config(const Config &config); // copy constructor
 
 		// getters
-		Location getLocation() const;
+		std::map<std::string, Location> getLocation() const;
 		std::vector<int> getPort() const;
 		std::vector<std::string> getServerName() const;
 		std::string getHost() const;
@@ -24,7 +27,7 @@ class Config {
 		std::string getRoot() const;
 		
 		// setters
-		void setLocation(Location location);
+		void setLocation(std::map<std::string, Location> location);
 		void setPort(std::vector<int> port);
 		void setServerName(std::vector<std::string> server_name);
 		void setHost(std::string host);

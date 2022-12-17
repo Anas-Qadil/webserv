@@ -17,12 +17,6 @@ std::vector<Config> descentParser(const std::string path)
 		servers.push_back(server);
 	}
 
-	// loops to print servers
-	for (size_t i = 0; i < servers.size(); i++) {
-		servers[i].print();
-	}
-	// servers[0].print();
-
 	return (servers);
 }
 
@@ -73,20 +67,23 @@ void loadingConfig()
 }
 
 const Config parseServer(std::string &serverContent) {
-	Config server = Config();
-	std::vector<int> ports;
-	std::string line;
-	size_t i = 0;
-	std::string location;
+	try {
+		Config server = Config();
+		std::vector<int> ports;
+		std::string line;
+		size_t i = 0;
+		std::string location;
 
-	// get Location
-	location = serverContent.substr(serverContent.find("location\n{"), serverContent.length());
-	// remove location
-	serverContent.erase(serverContent.find("location\n{"), serverContent.length());
-
-	parseServerContent(serverContent, server);
-	parseLocationContent(location, server);
-	return (server);
+		// get Location
+		location = serverContent.substr(serverContent.find("location /\n{"), serverContent.length());
+		// remove location
+		serverContent.erase(serverContent.find("location /\n{"), serverContent.length());
+		parseServerContent(serverContent, server);
+		parseLocationContent(location, server);
+		return (server);
+	} catch (std::exception &e) {
+		throw std::runtime_error("Error: location is not valid");
+	}
 }
 
 std::string getLine(std::string &content) {
@@ -201,8 +198,8 @@ void parseServerContent(std::string &content, Config &server) {
 	// check if server content is valid
 	analyzeServerContent(content);
 	// split content into lines
-	std::cout << content << std::endl;
-	std::cout << "-----------------------------------------" << std::endl;
+	// std::cout << content << std::endl;
+	// std::cout << "-----------------------------------------" << std::endl;
 	for (size_t i = 0; i < content.length(); i++) {
 		line = getLine(content);
 		if (line.length() == 0) continue ;
@@ -225,8 +222,119 @@ void parseServerContent(std::string &content, Config &server) {
 	}
 }
 
-void parseLocationContent(std::string &content, Config &location) {
+void parseLocationContent(std::string &content, Config &server) {
+	// std::cout << content << std::endl;
+	// std::cout << "-----------------------------------------" << std::endl;
+	std::vector<std::string> locations;
+	while (content.find("}\nlocation /") != std::string::npos) {
+		locations.push_back(content.substr(0, content.find("}\nlocation /")));
+		content.erase(0, content.find("}\nlocation /") + 2);
+	}
 
+	locations.push_back(content.substr(0, content.find("}\n")));
+	content.erase(0, content.find("}\n") + 2);
+
+	// loop through locations vector and print each location
+	for (size_t i = 0; i < locations.size(); i++ ) {
+		analyzeLocationContent(locations[i], server);
+	}
+}
+
+std::string getLocationLine(std::string &content) {
+	std::string line;
+	size_t i = 0;
+	while (content[i] != '\n') {
+		line += content[i];
+		i++;
+	}
+	content.erase(0, i + 1);
+	return (line);
+}
+
+void analyzeLocationContent(std::string location, Config &server) {
+	try {
+		std::string line;
+		std::map<std::string, Location> loca;
+		std::string path;
+
+		for (size_t i = 0; i < location.length(); i++) {
+			// get line
+			line = getLocationLine(location);
+			if (line.length() == 0) continue;
+			if (line.find("location") != std::string::npos) {
+				path = getLocationPath(line.substr(line.find("location") + 9));
+				loca[path] = Location();
+			} else if (line.find("autoindex") != std::string::npos) {
+				std::string autoindex = getAutoindex(line.substr(line.find("autoindex") + 10));
+				loca[path].setAutoindex(autoindex);
+			} else if (line.find("index") != std::string::npos) {
+				std::string index = getIndex(line.substr(line.find("index")  + 6));
+				loca[path].setIndex(index);
+			} else if (line.find("root") != std::string::npos) {
+				std::string root = getLocationRoot(line.substr(line.find("root") + 5));
+				loca[path].setRoot(root);
+			} else if (line.find("upload_enable") != std::string::npos) {
+				std::string uploadEnable = getUploadEnable(line.substr(line.find("upload_enable") + 14));
+				loca[path].setUploadEnable(uploadEnable);
+			} else if (line.find("upload_path") != std::string::npos) {
+				std::string uploadPath = getUploadPath(line.substr(line.find("upload_path") + 12));
+				loca[path].setUploadPath(uploadPath);
+			}
+			std::cout << line << std::endl;
+		}
+
+	} catch (std::exception &e) {
+		std::cout << e.what() << std::endl;
+	}
+}
+
+std::string getUploadPath(std::string str) {
+	// remove ; at the end
+	return (str);
+}
+
+std::string getUploadEnable(std::string str) {
+	// remove ; at the end
+	if (str[str.length() - 1] == ';') str.erase(str.length() - 1, 1);
+	if (str.length() == 0) throw std::runtime_error("Error: No upload_enable found");
+	if (str != "on" && str != "off") throw std::runtime_error("Error: Invalid upload_enable");
+	return (str);
+}
+
+std::string getLocationRoot(std::string root) {
+	// check if root is valid
+	// remove ; at the end
+	if (root[root.length() - 1] == ';') root.erase(root.length() - 1, 1);
+	if (root.length() == 0) throw std::runtime_error("Error: No root path found");
+	// validate file path
+	if (!isValidFilePath(root)) throw std::runtime_error("Error: Invalid root path");
+	return (root);
+}
+
+std::string getIndex(std::string filePath) {
+	// check if index is valid
+	// remove ; at the end
+	if (filePath[filePath.length() - 1] == ';') filePath.erase(filePath.length() - 1, 1);
+	if (filePath.length() == 0) throw std::runtime_error("Error: No index found");
+	// validate file path
+	if (!isValidFilePath(filePath)) throw std::runtime_error("Error: Invalid index");
+	return (filePath);
+}
+
+std::string getLocationPath(std::string path) {
+	// check if path is valid
+	if (path.length() == 0) throw std::runtime_error("Error: No location path found");
+	if (!isValidUrlPath(path)) throw std::runtime_error("Error: Invalid location path");
+	return (path);
+}
+
+std::string getAutoindex(std::string autoindex) {
+	//remove ; at the end
+	if (autoindex[autoindex.length() - 1] == ';') autoindex.erase(autoindex.length() - 1, 1);
+	// check if autoindex is valid
+	if (autoindex.length() == 0) throw std::runtime_error("Error: No autoindex found");
+	if (autoindex != "on" && autoindex != "off") throw std::runtime_error("Error: Invalid autoindex");
+	return (autoindex);
 }
 
 std::vector<std::string> getServerNames(std::string serverNames) {
@@ -311,4 +419,38 @@ std::string getServerRoot(std::string line) {
 	if (root[root.length() - 1] == ' ') root.erase(root.length() - 1, 1);
 	if (root[root.length() - 1] != '/') root += '/';
 	return (root);
+}
+
+bool isValidUrlPath(const std::string& path) {
+  // A valid URL path must start with a '/' character
+  if (path[0] != '/') {
+    return false;
+  }
+
+  // Iterate through each character in the path
+  for (size_t i = 1; i < path.length(); i++) {
+    char c = path[i];
+    // A valid URL path can only contain alphanumeric characters, underscores, and hyphens
+    if (!isalnum(c) && c != '_' && c != '-') {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+
+bool isValidFilePath(const std::string &path) {
+  // A valid file path must start with a '/' or a letter
+  if (path[0] != '/' && !isalpha(path[0])) {
+    return false;
+  }
+  // Iterate through each character in the path
+  for (size_t i = 1; i < path.length(); i++) {
+    char c = path[i];
+    if (!isalnum(c) && c != '_' && c != '-' && c != '.' && c != '/') {
+      return false;
+    }
+  }
+  return (true);
 }

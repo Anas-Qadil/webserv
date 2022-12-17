@@ -72,8 +72,8 @@ void analyze(std::string &content) {
 	if (content.find("server\n{") == std::string::npos)
 		throw std::runtime_error("Error: config file must have at least one server block");
 	// check if there is a location block
-	if (content.find("location\n{") == std::string::npos)
-		throw std::runtime_error("Error: config file must have at least one location block");
+	if (content.find("location /\n{") == std::string::npos)
+		throw std::runtime_error("Error: config file must have at least one location block for default root \"/\"");
 	// check if there is a root directive
 	if (content.find("root") == std::string::npos)
 		throw std::runtime_error("Error: config file must have at least one root directive");

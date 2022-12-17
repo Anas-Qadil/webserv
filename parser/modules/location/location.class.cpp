@@ -7,7 +7,7 @@ Location::Location() {
 	this->allow_methods.push_back("");
 	this->root = "";
 	this->upload_enable = "off";
-	this->upload_store = "";
+	this->upload_path = "";
 }
 
 // getters
@@ -27,7 +27,10 @@ std::string Location::getUploadEnable() const {
 	return this->upload_enable;
 }
 std::string Location::getUploadStore() const {
-	return this->upload_store;
+	return this->upload_path;
+}
+std::string Location::getLocationPath() const {
+	return this->locationPath;
 }
 
 // setters
@@ -46,8 +49,11 @@ void Location::setRoot(std::string root) {
 void Location::setUploadEnable(std::string upload_enable) {
 	this->upload_enable = upload_enable;
 }
-void Location::setUploadStore(std::string upload_store) {
-	this->upload_store = upload_store;
+void Location::setUploadPath(std::string upload_path) {
+	this->upload_path = upload_path;
+}
+void Location::setLocationPath(std::string locationPath) {
+	this->locationPath = locationPath;
 }
 
 // other methods
@@ -61,7 +67,7 @@ void Location::printLocation() const {
 	std::cout << std::endl;
 	std::cout << "root: " << this->root << std::endl;
 	std::cout << "upload_enable: " << this->upload_enable << std::endl;
-	std::cout << "upload_store: " << this->upload_store << std::endl;
+	std::cout << "upload_path: " << this->upload_path << std::endl;
 }
 
 void Location::clearLocation() {
@@ -70,7 +76,7 @@ void Location::clearLocation() {
 	this->allow_methods.clear();
 	this->root = "";
 	this->upload_enable = "";
-	this->upload_store = "";
+	this->upload_path = "";
 }
 
 // destructor

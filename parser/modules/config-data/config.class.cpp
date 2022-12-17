@@ -3,7 +3,7 @@
 
 Config::Config() {
 	// fill with default values
-	this->location = Location();
+	this->location["/"] = Location();
 	this->port.push_back(80);
 	this->server_name.push_back("localhost");
 	this->host = "localhost";
@@ -21,7 +21,7 @@ Config::Config(const Config &config) {
 }
 
 // getters
-Location Config::getLocation() const {
+std::map<std::string, Location> Config::getLocation() const {
 	return this->location;
 }
 std::vector<int> Config::getPort() const {
@@ -41,7 +41,7 @@ std::string Config::getRoot() const {
 }
 
 // setters
-void Config::setLocation(Location location) {
+void Config::setLocation(std::map<std::string, Location> location) {
 	this->location = location;
 }
 void Config::setPort(std::vector<int> port) {
@@ -80,12 +80,16 @@ void Config::print() const {
 	std::cout << "client_max_body_size: " << this->client_max_body_size << std::endl;
 	std::cout << "root: " << this->root << std::endl;
 	std::cout << "---------------------- Location -------------------------" << std::endl;
-	this->location.printLocation();
+	// loop through location map
+	for (std::map<std::string, Location>::const_iterator it = this->location.begin(); it != this->location.end(); ++it) {
+		std::cout << "location: " << it->first << std::endl;
+		it->second.printLocation();
+	}
 	std::cout << "---------------------------------------------------------" << std::endl;
 }
 
 void Config::clear() {
-	this->location = Location();
+	this->location["/"] = Location();
 	this->port.clear();
 	this->server_name.clear();
 	this->host.clear();

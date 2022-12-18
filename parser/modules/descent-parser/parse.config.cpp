@@ -16,6 +16,10 @@ std::vector<Config> descentParser(const std::string path)
 		Config server = parseServer(serversData[i]);
 		servers.push_back(server);
 	}
+	// print servers
+	for (size_t i = 0; i < servers.size(); i++) {
+		servers[i].print();
+	}
 
 	return (servers);
 }
@@ -279,17 +283,61 @@ void analyzeLocationContent(std::string location, Config &server) {
 			} else if (line.find("upload_path") != std::string::npos) {
 				std::string uploadPath = getUploadPath(line.substr(line.find("upload_path") + 12));
 				loca[path].setUploadPath(uploadPath);
-			}
-			std::cout << line << std::endl;
+			} else if (line.find("allowed_methods") != std::string::npos) {
+				std::vector<std::string> allowedMethods = getAllowedMethods(line.substr(line.find("allowed_methods") + 16));
+				loca[path].setAllowedMethods(allowedMethods);
+			} 
 		}
-
+		server.setLocation(loca);
 	} catch (std::exception &e) {
 		std::cout << e.what() << std::endl;
 	}
 }
 
+std::vector<std::string> getAllowedMethods(std::string str) {
+	std::vector<std::string> allowedMethods;
+	std::string method;
+	// check for valid braces
+	if (!hasValidBraces(str)) throw std::runtime_error("Error: Invalid braces in allowed_methods");
+	// remove ; at the end
+	if (str[str.length() - 1] == ';') str.erase(str.length() - 1, 1);
+	// remove braces
+	str.erase(0, 1);
+	str.erase(str.length() - 1, 1);
+	// check if string hasother characters than spaces and commas and normal characters
+	for (size_t i = 0; i < str.length(); i++) {
+		if (str[i] != ' ' && str[i] != ',' && !isalpha(str[i])) throw std::runtime_error("Error: Invalid characters in allowed_methods");
+	}
+
+	// split string by comma
+	while (str.find(",") != std::string::npos) {
+		method = str.substr(0, str.find(","));
+		// remove spaces
+		while (method.find(" ") != std::string::npos) {
+			method.erase(method.find(" "), 1);
+		}
+		allowedMethods.push_back(method);
+		str.erase(0, str.find(",") + 1);
+	}
+	// remove spaces
+	while (str.find(" ") != std::string::npos) {
+		str.erase(str.find(" "), 1);
+	}
+	allowedMethods.push_back(str);
+
+	// check if allowed methods are valid [GET, POST, DELETE]
+	for (size_t i = 0; i < allowedMethods.size(); i++) {
+		if (allowedMethods[i] != "GET" && allowedMethods[i] != "POST" && allowedMethods[i] != "DELETE") throw std::runtime_error("Error: Invalid method in allowed_methods");
+	}
+	return (allowedMethods);
+}
+
 std::string getUploadPath(std::string str) {
 	// remove ; at the end
+	if (str[str.length() - 1] == ';') str.erase(str.length() - 1, 1);
+	if (str.length() == 0) throw std::runtime_error("Error: No upload_path found");
+	// validate file path
+	if (!isValidFilePath(str)) throw std::runtime_error("Error: Invalid upload_path");
 	return (str);
 }
 
@@ -453,4 +501,33 @@ bool isValidFilePath(const std::string &path) {
     }
   }
   return (true);
+}
+
+bool hasValidBraces(const std::string& str) {
+	std::stack<char> s;
+	size_t i = 0;
+
+	while (i < str.length()) {
+		char c = str[i];
+		if (c == '(' || c == '[' || c == '{') {
+				s.push(c);
+		} else if (c == ')') {
+			if (s.empty() || s.top() != '(') {
+					return false;
+			}
+			s.pop();
+		} else if (c == ']') {
+			if (s.empty() || s.top() != '[') {
+					return false;
+			}
+			s.pop();
+		} else if (c == '}') {
+			if (s.empty() || s.top() != '{') {
+					return false;
+			}
+			s.pop();
+		}
+		i++;
+	}
+	return s.empty();
 }

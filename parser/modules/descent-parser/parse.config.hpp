@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include "../config-data/config.class.hpp"
+#include <stack>
 
 void loadingConfig();
 std::vector<Config> descentParser(const std::string path);
@@ -31,3 +32,5 @@ std::string getIndex(std::string filePath);
 std::string getLocationRoot(std::string root);
 std::string getUploadEnable(std::string str);
 std::string getUploadPath(std::string str);
+std::vector<std::string> getAllowedMethods(std::string str);
+bool hasValidBraces(const std::string& str);

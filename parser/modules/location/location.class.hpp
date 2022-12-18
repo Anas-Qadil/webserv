@@ -27,7 +27,7 @@ class Location {
 		// setters
 		void setAutoindex(std::string autoindex);
 		void setIndex(std::string index);
-		void setAllowMethods(std::vector<std::string> allow_methods);
+		void setAllowedMethods(std::vector<std::string> allow_methods);
 		void setRoot(std::string root);
 		void setUploadEnable(std::string upload_enable);
 		void setUploadPath(std::string upload_path);

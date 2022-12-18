@@ -40,7 +40,7 @@ void Location::setAutoindex(std::string autoindex) {
 void Location::setIndex(std::string index) {
 	this->index = index;
 }
-void Location::setAllowMethods(std::vector<std::string> allow_methods) {
+void Location::setAllowedMethods(std::vector<std::string> allow_methods) {
 	this->allow_methods = allow_methods;
 }
 void Location::setRoot(std::string root) {

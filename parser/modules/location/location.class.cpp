@@ -31,6 +31,12 @@ std::string Location::getUploadStore() const {
 std::string Location::getLocationPath() const {
 	return this->locationPath;
 }
+std::string Location::getReturnPath() const {
+	return this->return_path;
+}
+int Location::getReturnCode() const {
+	return this->return_code;
+}
 
 // setters
 void Location::setAutoindex(std::string autoindex) {
@@ -54,19 +60,37 @@ void Location::setUploadPath(std::string upload_path) {
 void Location::setLocationPath(std::string locationPath) {
 	this->locationPath = locationPath;
 }
+void Location::setReturnPath(std::string return_path) {
+	this->return_path = return_path;
+}
+void Location::setReturnCode(int return_code) {
+	this->return_code = return_code;
+}
 
 // other methods
 void Location::printLocation() const {
-	std::cout << "autoindex: " << this->autoindex << std::endl;
-	std::cout << "index: " << this->index << std::endl;
-	std::cout << "allow_methods: ";
-	for (size_t i = 0; i < this->allow_methods.size(); i++) {
-		std::cout << this->allow_methods[i] << " ";
+	if (this->autoindex != "")
+		std::cout << "autoindex: " << this->autoindex << std::endl;
+	if (this->index != "")
+		std::cout << "index: " << this->index << std::endl;
+	if (this->allow_methods.size() > 0)
+	{
+		std::cout << "allow_methods: ";
+		for (size_t i = 0; i < this->allow_methods.size(); i++) {
+			std::cout << this->allow_methods[i] << " ";
+		}
+		std::cout << std::endl;
 	}
-	std::cout << std::endl;
-	std::cout << "root: " << this->root << std::endl;
-	std::cout << "upload_enable: " << this->upload_enable << std::endl;
-	std::cout << "upload_path: " << this->upload_path << std::endl;
+	if (this->root != "")
+		std::cout << "root: " << this->root << std::endl;
+	if (this->upload_enable != "")
+		std::cout << "upload_enable: " << this->upload_enable << std::endl;
+	if (this->upload_path != "")
+		std::cout << "upload_path: " << this->upload_path << std::endl;
+	if (this->return_path != "")
+		std::cout << "return_path: " << this->return_path << std::endl;
+	if (this->return_code != 0)
+		std::cout << "return_code: " << this->return_code << std::endl;
 }
 
 void Location::clearLocation() {

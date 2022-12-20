@@ -10,6 +10,8 @@ class Location {
 		std::string root;
 		std::string upload_enable;
 		std::string upload_path;
+		std::string return_path;
+		int return_code;
 	
 	public:
 		Location(); // default constructor
@@ -23,6 +25,8 @@ class Location {
 		std::string getUploadEnable() const;
 		std::string getUploadStore() const;
 		std::string getLocationPath() const;
+		std::string getReturnPath() const;
+		int getReturnCode() const;
 
 		// setters
 		void setAutoindex(std::string autoindex);
@@ -32,6 +36,8 @@ class Location {
 		void setUploadEnable(std::string upload_enable);
 		void setUploadPath(std::string upload_path);
 		void setLocationPath(std::string locationPath);
+		void setReturnPath(std::string return_url);
+		void setReturnCode(int return_code);
 
 		// other methods
 		void printLocation() const;

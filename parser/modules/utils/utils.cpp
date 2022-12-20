@@ -14,6 +14,8 @@ const std::string readFile(std::string path) {
 		if (file.peek() == EOF) break; 
 		content.push_back('\n');
 	}
+	generaleCheck(content);
+	generaleFormat(content);
 	return (content);
 }
 
@@ -113,4 +115,29 @@ int checkBrackets(std::string content) {
 		return (1);
 	}
 	return (0);
+}
+
+void generaleCheck(std::string content) {
+	// check for "location " without a "/" after it
+	if (content.find("location ") != std::string::npos) {
+		size_t pos = content.find("location ");
+		while (pos != std::string::npos) {
+			if (content[pos + 9] != '/') {
+				throw std::runtime_error("Error: location must be followed by a \"/\"");
+			}
+			pos = content.find("location ", pos + 1);
+		}
+	}
+}
+
+void generaleFormat(std::string &content) {
+	// check if ';' not followed by a '\n' and add '\n' if needed
+	for (size_t i = 0; i < content.length(); i++) {
+		if (content[i] == ';' && content[i + 1] != '\0' ) {
+			if (content[i + 1] != '\n') {
+				content.insert(i + 1, "\n");
+			}
+		}
+	}
+	// std::cout << content << std::endl;
 }

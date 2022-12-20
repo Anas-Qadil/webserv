@@ -39,3 +39,4 @@ std::string getUploadEnable(std::string str);
 std::string getUploadPath(std::string str);
 std::vector<std::string> getAllowedMethods(std::string str);
 bool hasValidBraces(const std::string& str);
+std::vector<std::string> getRedirect(std::string line);

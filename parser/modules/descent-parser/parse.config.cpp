@@ -15,9 +15,9 @@ std::vector<Config> descentParser(const std::string path)
 		servers.push_back(server);
 	}
 	// print servers
-	for (size_t i = 0; i < servers.size(); i++) {
-		servers[i].print();
-	}
+	// for (size_t i = 0; i < servers.size(); i++) {
+	// 	servers[i].print();
+	// }
 
 	return (servers);
 }
@@ -88,7 +88,8 @@ const Config parseServer(std::string &serverContent) {
 
 std::string getLine(std::string &content) {
 	std::string line;
-
+	// check if there is a '\n' in the end of the content if not add it
+	if (content[content.length() - 1] != '\n') content += '\n';
 	size_t i = 0;
 	while (i < content.length()) {
 		if (content[i] == '\n') {
@@ -281,9 +282,48 @@ void analyzeLocationContent(std::string location, Config &server) {
 		} else if (line.find("allowed_methods") != std::string::npos) {
 			std::vector<std::string> allowedMethods = getAllowedMethods(line.substr(line.find("allowed_methods") + 16));
 			loca[path].setAllowedMethods(allowedMethods);
+		} else if (line.find("return") != std::string::npos) {
+			std::vector<std::string> ret = getRedirect(line.substr(line.find("return") + 7));
+			try {
+				// try catch because stoi throws exception if it can't convert string to int
+				int code = std::stoi(ret[0]);
+				loca[path].setReturnCode(code);
+				loca[path].setReturnPath(ret[1]);
+			} catch (std::exception &e) {
+				throw std::runtime_error("Error: Invalid return code");
+			}
 		}
 	}
 	server.setLocation(path, loca[path]);
+}
+
+std::vector<std::string> getRedirect(std::string line) {
+	// check ; at the end
+	if (line[line.length() - 1] != ';') throw std::runtime_error("Error: Missing ; at the end of return");
+	// remove ; at the end
+	line.erase(line.length() - 1, 1);
+	// check if there is only 2 elements separated by space
+	std::vector<std::string> ret;
+	std::string tmp;
+	for (size_t i = 0; i < line.length(); i++) {
+		if (line[i] == ' ') {
+			ret.push_back(tmp);
+			tmp.clear();
+		} else {
+			tmp += line[i];
+		}
+	}
+	ret.push_back(tmp);
+	// check if ret[0] is a valid string number
+	for (size_t i = 0; i < ret[0].length(); i++) {
+		if (!isdigit(ret[0][i])) throw std::runtime_error("Error: Invalid return code");
+	}
+	// check if ret[1] is a valid path
+	if (ret[1][0] != '/') throw std::runtime_error("Error: Invalid return path");
+	// check if there are only 2 elements
+	if (ret.size() != 2) throw std::runtime_error("Error: Invalid return");
+	if (!isValidUrlPath(ret[1])) throw std::runtime_error("Error: Invalid return path");
+	return (ret);
 }
 
 std::vector<std::string> getAllowedMethods(std::string str) {
@@ -358,6 +398,8 @@ std::string getIndex(std::string filePath) {
 	if (filePath.length() == 0) throw std::runtime_error("Error: No index found");
 	// validate file path
 	if (!isValidFilePath(filePath)) throw std::runtime_error("Error: Invalid index");
+	// check if file extension is html
+	if (filePath.substr(filePath.find_last_of(".") + 1) != "html") throw std::runtime_error("Error: Invalid index");
 	return (filePath);
 }
 
@@ -425,17 +467,8 @@ std::string getHostname(std::string line) {
 	return (hostname);
 }
 
-void analyzeClientMaxBodySize(std::string &clientMaxBodySize) {
-	// validate client max body size here ======>
-}
-
-void analyzeServerRoot(std::string &serverRoot) {
-	// validate server root here ======>
-}
-
 int getClientMaxBodySize(std::string line) {
 	try {
-		analyzeClientMaxBodySize(line);
 		int clientMaxBodySize = 0;
 		// check if client max body size is a number
 		for (size_t i = 0; i < line.length(); i++) {
@@ -452,7 +485,6 @@ int getClientMaxBodySize(std::string line) {
 
 std::string getServerRoot(std::string line) {
 	std::string root = line;
-	analyzeServerRoot(root);
 	// check if root is valid
 	if (root.length() == 0) throw std::runtime_error("Error: No root path found");
 	if (root[0] == ' ') root.erase(0, 1);

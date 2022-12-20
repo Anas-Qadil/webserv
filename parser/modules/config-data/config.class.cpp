@@ -3,12 +3,9 @@
 
 Config::Config() {
 	// fill with default values
-	this->location["/"] = Location();
-	this->port.push_back(80);
-	this->server_name.push_back("localhost");
-	this->host = "localhost";
-	this->client_max_body_size = 1;
-	this->root = "/";
+	this->host = "";
+	this->client_max_body_size = 0;
+	this->root = "";
 }
 // copy constructor
 Config::Config(const Config &config) {
@@ -41,8 +38,10 @@ std::string Config::getRoot() const {
 }
 
 // setters
-void Config::setLocation(std::map<std::string, Location> location) {
-	this->location = location;
+void Config::setLocation(std::string locationPath, Location location) {
+	if (this->location.find(locationPath) != this->location.end())
+		throw std::runtime_error("Location already exists");
+	this->location[locationPath] = location;
 }
 void Config::setPort(std::vector<int> port) {
 	this->port = port;
@@ -84,8 +83,8 @@ void Config::print() const {
 	for (std::map<std::string, Location>::const_iterator it = this->location.begin(); it != this->location.end(); ++it) {
 		std::cout << "location: " << it->first << std::endl;
 		it->second.printLocation();
+		std::cout << "---------------------------------------------------------" << std::endl;
 	}
-	std::cout << "---------------------------------------------------------" << std::endl;
 }
 
 void Config::clear() {
@@ -98,5 +97,10 @@ void Config::clear() {
 }
 
 Config::~Config() {
-	// std::cout << "Config destructor called" << std::endl;
+	this->location.clear();
+	this->port.clear();
+	this->server_name.clear();
+	this->host.clear();
+	this->client_max_body_size = 0;
+	this->root.clear();
 }

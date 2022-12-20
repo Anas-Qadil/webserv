@@ -27,7 +27,7 @@ class Config {
 		std::string getRoot() const;
 		
 		// setters
-		void setLocation(std::map<std::string, Location> location);
+		void setLocation(std::string locationPath, Location location);
 		void setPort(std::vector<int> port);
 		void setServerName(std::vector<std::string> server_name);
 		void setHost(std::string host);

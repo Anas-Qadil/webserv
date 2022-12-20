@@ -1,6 +1,4 @@
 #include "./parse.config.hpp"
-#include "../utils/utils.hpp"
-#include <unistd.h>
 
 std::vector<Config> descentParser(const std::string path) 
 {
@@ -71,23 +69,21 @@ void loadingConfig()
 }
 
 const Config parseServer(std::string &serverContent) {
-	try {
-		Config server = Config();
-		std::vector<int> ports;
-		std::string line;
-		size_t i = 0;
-		std::string location;
+	Config server = Config();
+	std::vector<int> ports;
+	std::string line;
+	size_t i = 0;
+	std::string location;
 
-		// get Location
-		location = serverContent.substr(serverContent.find("location /\n{"), serverContent.length());
-		// remove location
-		serverContent.erase(serverContent.find("location /\n{"), serverContent.length());
-		parseServerContent(serverContent, server);
-		parseLocationContent(location, server);
-		return (server);
-	} catch (std::exception &e) {
-		throw std::runtime_error("Error: location is not valid");
-	}
+	// get Location
+	if (serverContent.find("location /\n{") == std::string::npos)
+		throw std::runtime_error("Error: wrong location formate");
+	location = serverContent.substr(serverContent.find("location /\n{"), serverContent.length());
+	// remove location
+	serverContent.erase(serverContent.find("location /\n{"), serverContent.length());
+	parseServerContent(serverContent, server);
+	parseLocationContent(location, server);
+	return (server);
 }
 
 std::string getLine(std::string &content) {
@@ -256,42 +252,38 @@ std::string getLocationLine(std::string &content) {
 }
 
 void analyzeLocationContent(std::string location, Config &server) {
-	try {
-		std::string line;
-		std::map<std::string, Location> loca;
-		std::string path;
+	std::string line;
+	std::map<std::string, Location> loca;
+	std::string path;
 
-		for (size_t i = 0; i < location.length(); i++) {
-			// get line
-			line = getLocationLine(location);
-			if (line.length() == 0) continue;
-			if (line.find("location") != std::string::npos) {
-				path = getLocationPath(line.substr(line.find("location") + 9));
-				loca[path] = Location();
-			} else if (line.find("autoindex") != std::string::npos) {
-				std::string autoindex = getAutoindex(line.substr(line.find("autoindex") + 10));
-				loca[path].setAutoindex(autoindex);
-			} else if (line.find("index") != std::string::npos) {
-				std::string index = getIndex(line.substr(line.find("index")  + 6));
-				loca[path].setIndex(index);
-			} else if (line.find("root") != std::string::npos) {
-				std::string root = getLocationRoot(line.substr(line.find("root") + 5));
-				loca[path].setRoot(root);
-			} else if (line.find("upload_enable") != std::string::npos) {
-				std::string uploadEnable = getUploadEnable(line.substr(line.find("upload_enable") + 14));
-				loca[path].setUploadEnable(uploadEnable);
-			} else if (line.find("upload_path") != std::string::npos) {
-				std::string uploadPath = getUploadPath(line.substr(line.find("upload_path") + 12));
-				loca[path].setUploadPath(uploadPath);
-			} else if (line.find("allowed_methods") != std::string::npos) {
-				std::vector<std::string> allowedMethods = getAllowedMethods(line.substr(line.find("allowed_methods") + 16));
-				loca[path].setAllowedMethods(allowedMethods);
-			} 
+	for (size_t i = 0; i < location.length(); i++) {
+		// get line
+		line = getLocationLine(location);
+		if (line.length() == 0) continue;
+		if (line.find("location") != std::string::npos) {
+			path = getLocationPath(line.substr(line.find("location") + 9));
+			loca[path] = Location();	
+		} else if (line.find("autoindex") != std::string::npos) {
+			std::string autoindex = getAutoindex(line.substr(line.find("autoindex") + 10));
+			loca[path].setAutoindex(autoindex);
+		} else if (line.find("index") != std::string::npos) {
+			std::string index = getIndex(line.substr(line.find("index")  + 6));
+			loca[path].setIndex(index);
+		} else if (line.find("root") != std::string::npos) {
+			std::string root = getLocationRoot(line.substr(line.find("root") + 5));
+			loca[path].setRoot(root);
+		} else if (line.find("upload_enable") != std::string::npos) {
+			std::string uploadEnable = getUploadEnable(line.substr(line.find("upload_enable") + 14));
+			loca[path].setUploadEnable(uploadEnable);
+		} else if (line.find("upload_path") != std::string::npos) {
+			std::string uploadPath = getUploadPath(line.substr(line.find("upload_path") + 12));
+			loca[path].setUploadPath(uploadPath);
+		} else if (line.find("allowed_methods") != std::string::npos) {
+			std::vector<std::string> allowedMethods = getAllowedMethods(line.substr(line.find("allowed_methods") + 16));
+			loca[path].setAllowedMethods(allowedMethods);
 		}
-		server.setLocation(loca);
-	} catch (std::exception &e) {
-		std::cout << e.what() << std::endl;
 	}
+	server.setLocation(path, loca[path]);
 }
 
 std::vector<std::string> getAllowedMethods(std::string str) {
@@ -531,3 +523,4 @@ bool hasValidBraces(const std::string& str) {
 	}
 	return s.empty();
 }
+

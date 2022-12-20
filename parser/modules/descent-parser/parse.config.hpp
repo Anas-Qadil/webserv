@@ -4,6 +4,11 @@
 #include <vector>
 #include "../config-data/config.class.hpp"
 #include <stack>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <cerrno>
+#include "./parse.config.hpp"
+#include "../utils/utils.hpp"
 
 void loadingConfig();
 std::vector<Config> descentParser(const std::string path);

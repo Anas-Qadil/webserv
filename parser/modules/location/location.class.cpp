@@ -4,7 +4,6 @@ Location::Location() {
 	// fill with default values
 	this->autoindex = "";
 	this->index = "";
-	this->allow_methods.push_back("");
 	this->root = "";
 	this->upload_enable = "off";
 	this->upload_path = "";
@@ -81,4 +80,5 @@ void Location::clearLocation() {
 
 // destructor
 Location::~Location() {
+	this->clearLocation();
 }

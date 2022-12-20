@@ -1,19 +1,15 @@
 NAME	= descent
 
-CONFIG_FILES	=	modules/config-data/config.class.cpp \
-								modules/config-data/config.utils.cpp
+CONFIG_FILES	=	modules/config-data/config.class.cpp 
 CONFIG_HEADERS	=	modules/config-data/config.class.hpp \
-								modules/config-data/config.utils.hpp
 
-LOCATION =	modules/location/location.class.cpp \
-						modules/location/location.utils.cpp
+LOCATION =	modules/location/location.class.cpp
 LOCATION_HEADERS =	modules/location/location.class.hpp
 
 DESCENT_PARSER	=	modules/descent-parser/parse.config.cpp
 DESCENT_PARSER_HEADERS =	modules/descent-parser/parse.config.hpp
 
 UTILS	=	modules/utils/utils.cpp
-
 UTILS_HEADERS =	modules/utils/utils.hpp
 
 

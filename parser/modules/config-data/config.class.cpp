@@ -40,7 +40,7 @@ std::string Config::getRoot() const {
 // setters
 void Config::setLocation(std::string locationPath, Location location) {
 	if (this->location.find(locationPath) != this->location.end())
-		throw std::runtime_error("Location already exists");
+		throw std::runtime_error("error: location already exists");
 	this->location[locationPath] = location;
 }
 void Config::setPort(std::vector<int> port) {

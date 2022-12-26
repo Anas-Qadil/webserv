@@ -5,8 +5,11 @@ Location::Location() {
 	this->autoindex = "";
 	this->index = "";
 	this->root = "";
-	this->upload_enable = "off";
+	this->upload_enable = "";
 	this->upload_path = "";
+	this->return_path = "";
+	this->return_code = -1;
+	this->fastcgi_pass = "";
 }
 
 // getters
@@ -37,6 +40,9 @@ std::string Location::getReturnPath() const {
 int Location::getReturnCode() const {
 	return this->return_code;
 }
+std::string Location::getFastcgiPass() const {
+	return this->fastcgi_pass;
+}
 
 // setters
 void Location::setAutoindex(std::string autoindex) {
@@ -66,6 +72,9 @@ void Location::setReturnPath(std::string return_path) {
 void Location::setReturnCode(int return_code) {
 	this->return_code = return_code;
 }
+void Location::setFastcgiPass(std::string fastcgi_pass) {
+	this->fastcgi_pass = fastcgi_pass;
+}
 
 // other methods
 void Location::printLocation() const {
@@ -89,8 +98,10 @@ void Location::printLocation() const {
 		std::cout << "upload_path: " << this->upload_path << std::endl;
 	if (this->return_path != "")
 		std::cout << "return_path: " << this->return_path << std::endl;
-	if (this->return_code != 0)
+	if (this->return_code != -1)
 		std::cout << "return_code: " << this->return_code << std::endl;
+	if (this->fastcgi_pass != "")
+		std::cout << "fastcgi_pass: " << this->fastcgi_pass << std::endl;
 }
 
 void Location::clearLocation() {

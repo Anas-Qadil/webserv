@@ -15,6 +15,9 @@ Config::Config(const Config &config) {
 	this->host = config.host;
 	this->client_max_body_size = config.client_max_body_size;
 	this->root = config.root;
+	this->error_page = config.error_page;
+	this->ss = config.ss;
+	this->ss2 = config.ss2;
 }
 
 // getters
@@ -35,6 +38,10 @@ int Config::getClientMaxBodySize() const {
 }
 std::string Config::getRoot() const {
 	return this->root;
+}
+std::map<std::string, std::string> Config::getErrorPage() const {
+	std::cout << "error page size: " << this->error_page.size() << std::endl;
+	return this->error_page;
 }
 
 // setters
@@ -58,6 +65,9 @@ void Config::setClientMaxBodySize(int client_max_body_size) {
 void Config::setRoot(std::string root) {
 	this->root = root;
 }
+void Config::setErrorPage(std::map<std::string, std::string> error_page) {
+	this->error_page = error_page;
+}
 
 // other methods
 void Config::print() const {
@@ -78,6 +88,15 @@ void Config::print() const {
 	std::cout << "host: " << this->host << std::endl;
 	std::cout << "client_max_body_size: " << this->client_max_body_size << std::endl;
 	std::cout << "root: " << this->root << std::endl;
+	// check if error_page is empty
+	// if (!this->error_page.empty()) {
+	// loop through error_page map
+		std::cout << "error_page: ";
+		for (std::map<std::string, std::string>::const_iterator it = this->error_page.begin(); it != this->error_page.end(); ++it) {
+			std::cout << it->first << " " << it->second << " ";
+		}
+		std::cout << std::endl;
+	// }
 	std::cout << "---------------------- Location -------------------------" << std::endl;
 	// loop through location map
 	for (std::map<std::string, Location>::const_iterator it = this->location.begin(); it != this->location.end(); ++it) {
@@ -88,12 +107,13 @@ void Config::print() const {
 }
 
 void Config::clear() {
-	this->location["/"] = Location();
+	this->location.clear();
 	this->port.clear();
 	this->server_name.clear();
 	this->host.clear();
 	this->client_max_body_size = 0;
 	this->root.clear();
+	this->error_page.clear();
 }
 
 Config::~Config() {
@@ -103,4 +123,5 @@ Config::~Config() {
 	this->host.clear();
 	this->client_max_body_size = 0;
 	this->root.clear();
+	this->error_page.clear();
 }

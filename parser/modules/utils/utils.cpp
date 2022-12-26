@@ -60,7 +60,7 @@ void formatLine(std::string &line) {
 void analyze(std::string &content) {
 	std::string formatedContent;
 
-	if (checkBrackets(content) != 0)
+	if (checkBrackets(content) == false)
 		throw std::runtime_error("Error: Brackets are not balanced");
 	// get first 6 characters form the content
 	std::string first6 = content.substr(0, 6);
@@ -101,20 +101,33 @@ void analyze(std::string &content) {
 }
 
 // check if all open brackets have a closing bracket
-int checkBrackets(std::string content) {
-	int openBrackets = 0;
-	int closeBrackets = 0;
-	for (size_t i = 0; i < content.length(); i++) {
-		if (content[i] == '{') {
-			openBrackets++;
-		} else if (content[i] == '}') {
-			closeBrackets++;
+bool checkBrackets(std::string str) {
+	std::stack<char> s;
+	size_t i = 0;
+
+	while (i < str.length()) {
+		char c = str[i];
+		if (c == '(' || c == '[' || c == '{') {
+				s.push(c);
+		} else if (c == ')') {
+			if (s.empty() || s.top() != '(') {
+					return false;
+			}
+			s.pop();
+		} else if (c == ']') {
+			if (s.empty() || s.top() != '[') {
+					return false;
+			}
+			s.pop();
+		} else if (c == '}') {
+			if (s.empty() || s.top() != '{') {
+					return false;
+			}
+			s.pop();
 		}
+		i++;
 	}
-	if (openBrackets != closeBrackets) {
-		return (1);
-	}
-	return (0);
+	return s.empty();
 }
 
 void generaleCheck(std::string content) {
@@ -122,7 +135,7 @@ void generaleCheck(std::string content) {
 	if (content.find("location ") != std::string::npos) {
 		size_t pos = content.find("location ");
 		while (pos != std::string::npos) {
-			if (content[pos + 9] != '/') {
+			if (content[pos + 9] != '/' && content[pos + 9] != '*') {
 				throw std::runtime_error("Error: location must be followed by a \"/\"");
 			}
 			pos = content.find("location ", pos + 1);
@@ -139,5 +152,16 @@ void generaleFormat(std::string &content) {
 			}
 		}
 	}
+	// check if "location " is followed by "*.php" or "*.py" and add '/' before it
+	for (size_t i = 0; i < content.length(); i++) {
+		if (content[i] == 'l' && content[i + 1] == 'o' && content[i + 2] == 'c' && content[i + 3] == 'a' && content[i + 4] == 't' && content[i + 5] == 'i' && content[i + 6] == 'o' && content[i + 7] == 'n' && content[i + 8] == ' ') {
+			if (content[i + 9] == '*' && content[i + 10] == '.' && (content[i + 11] == 'p' || content[i + 11] == 'P') && (content[i + 12] == 'h' || content[i + 12] == 'H') && (content[i + 13] == 'p' || content[i + 13] == 'P')) {
+				content.insert(i + 9, "/");
+			} else if (content[i + 9] == '*' && content[i + 10] == '.' && (content[i + 11] == 'p' || content[i + 11] == 'P') && (content[i + 12] == 'y' || content[i + 12] == 'Y')) {
+				content.insert(i + 9, "/");
+			}
+		}
+	}
+
 	// std::cout << content << std::endl;
 }

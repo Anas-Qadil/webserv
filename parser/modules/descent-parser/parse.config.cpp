@@ -15,10 +15,9 @@ std::vector<Config> descentParser(const std::string path)
 		servers.push_back(server);
 	}
 	// print servers
-	// for (size_t i = 0; i < servers.size(); i++) {
-	// 	servers[i].print();
-	// }
-
+	for (size_t i = 0; i < servers.size(); i++) {
+		servers[i].print();
+	}
 	return (servers);
 }
 
@@ -83,6 +82,16 @@ const Config parseServer(std::string &serverContent) {
 	serverContent.erase(serverContent.find("location /\n{"), serverContent.length());
 	parseServerContent(serverContent, server);
 	parseLocationContent(location, server);
+
+	// std::map<std::string, std::string> errorPage = server.getErrorPage();
+	// std::map<std::string, std::string>::iterator it = errorPage.begin();
+	// std::cout << "error_page: ";
+	// while (it != errorPage.end()) {
+	// 	std::cout << it->first << " " << it->second << " ";
+	// 	it++;
+	// }
+	// std::cout << std::endl;
+
 	return (server);
 }
 
@@ -196,6 +205,7 @@ void analyzeServerContent(std::string &content) {
 
 void parseServerContent(std::string &content, Config &server) {
 	std::string line;
+	std::map<std::string, std::string> errorPage;
 	// check if server content is valid
 	analyzeServerContent(content);
 	// split content into lines
@@ -219,8 +229,39 @@ void parseServerContent(std::string &content, Config &server) {
 		} else if (line.find("root") != std::string::npos) {
 			std::string root = getServerRoot(line.substr(line.find("root") + 5));
 			server.setRoot(root);
+		} else if (line.find("error_page") != std::string::npos) {
+			std::vector<std::string> errorData = getErrorPageContent(line.substr(line.find("error_page") + 11));
+			errorPage[errorData[0]] = errorData[1];
 		}
 	}
+	server.setErrorPage(errorPage);
+}
+
+std::vector<std::string> getErrorPageContent(std::string line) {
+	std::vector<std::string> errorData;
+	std::string errorCode;
+	std::string errorPage;
+	// check if there is ; at the end
+	if (line[line.length() - 1] != ';') throw std::runtime_error("Error: No ; at the end of error_page");
+	// remove ";"
+	line.erase(line.length() - 1, 1);
+	// check if there is only 1 space between error_page and path
+	if (line.find(" ") == std::string::npos) throw std::runtime_error("Error: No space between error_page and path");
+	if (line.find(" ") != line.rfind(" ")) throw std::runtime_error("Error: More than 2 elements between error_code and path");
+	// get error code
+	errorCode = line.substr(0, line.find(" "));
+	// get path
+	errorPage = line.substr(line.find(" ") + 1);
+	// check if error code is valid
+	if (errorCode != "404" && errorCode != "403" && errorCode != "500" && errorCode != "502") throw std::runtime_error("Error: Invalid error code");
+	// check if path is valid
+	if (errorPage[0] != '/') throw std::runtime_error("Error: Invalid path");
+	// check if path is valid
+	if (errorPage[errorPage.length() - 1] == '/') throw std::runtime_error("Error: Invalid path");
+
+	errorData.push_back(errorCode);	
+	errorData.push_back(errorPage);
+	return (errorData);
 }
 
 void parseLocationContent(std::string &content, Config &server) {
@@ -292,9 +333,22 @@ void analyzeLocationContent(std::string location, Config &server) {
 			} catch (std::exception &e) {
 				throw std::runtime_error("Error: Invalid return code");
 			}
+		} else if (line.find("fastcgi_pass") != std::string::npos) {
+			std::string fastcgi_pass = getFastCgiPass(line.substr(line.find("fastcgi_pass") + 13));
+			loca[path].setFastcgiPass(fastcgi_pass);
 		}
 	}
 	server.setLocation(path, loca[path]);
+}
+
+std::string getFastCgiPass(std::string line) {
+	// check ; at the end
+	if (line[line.length() - 1] != ';') throw std::runtime_error("Error: Missing ; at the end of location");
+	// remove ; at the end
+	line.erase(line.length() - 1, 1);
+	// check if there is only 1 element
+	if (line.find(" ") != std::string::npos) throw std::runtime_error("Error: Invalid location path");
+	return (line);
 }
 
 std::vector<std::string> getRedirect(std::string line) {
@@ -496,19 +550,17 @@ std::string getServerRoot(std::string line) {
 bool isValidUrlPath(const std::string& path) {
   // A valid URL path must start with a '/' character
   if (path[0] != '/') {
-    return false;
+    return (false);
   }
-
   // Iterate through each character in the path
   for (size_t i = 1; i < path.length(); i++) {
     char c = path[i];
     // A valid URL path can only contain alphanumeric characters, underscores, and hyphens
-    if (!isalnum(c) && c != '_' && c != '-') {
-      return false;
+    if (!isalnum(c) && c != '_' && c != '-' && c != '*' && c != '.' && c != '/') {
+      return (false);
     }
   }
-
-  return true;
+  return (true);
 }
 
 

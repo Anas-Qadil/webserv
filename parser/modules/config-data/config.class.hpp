@@ -3,17 +3,20 @@
 #include "../location/location.class.hpp"
 #include <map>
 
-
 class Config {
 	private:
-		// Location location;
 		std::map<std::string, Location> location;
+		std::map<std::string, std::string> error_page;
 		std::vector<int> port;
 		std::vector<std::string> server_name;
 		std::string host;
 		int	client_max_body_size;
 		std::string root;
+
 	public:
+		std::string ss;
+		std::string ss2;
+		
 		Config(); // default constructor
 		~Config(); // destructor
 		Config(const Config &config); // copy constructor
@@ -25,6 +28,7 @@ class Config {
 		std::string getHost() const;
 		int getClientMaxBodySize() const;
 		std::string getRoot() const;
+		std::map<std::string, std::string> getErrorPage() const;
 		
 		// setters
 		void setLocation(std::string locationPath, Location location);
@@ -33,6 +37,7 @@ class Config {
 		void setHost(std::string host);
 		void setClientMaxBodySize(int client_max_body_size);
 		void setRoot(std::string root);
+		void setErrorPage(std::map<std::string, std::string> error_page);
 
 		// other methods
 		void print() const;

@@ -12,6 +12,8 @@ class Location {
 		std::string upload_path;
 		std::string return_path;
 		int return_code;
+		// cgi
+		std::string fastcgi_pass;
 	
 	public:
 		Location(); // default constructor
@@ -27,6 +29,7 @@ class Location {
 		std::string getLocationPath() const;
 		std::string getReturnPath() const;
 		int getReturnCode() const;
+		std::string getFastcgiPass() const;
 
 		// setters
 		void setAutoindex(std::string autoindex);
@@ -38,6 +41,7 @@ class Location {
 		void setLocationPath(std::string locationPath);
 		void setReturnPath(std::string return_url);
 		void setReturnCode(int return_code);
+		void setFastcgiPass(std::string fastcgi_pass);
 
 		// other methods
 		void printLocation() const;

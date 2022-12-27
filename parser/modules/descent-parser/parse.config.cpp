@@ -453,7 +453,7 @@ std::string getIndex(std::string filePath) {
 	// validate file path
 	if (!isValidFilePath(filePath)) throw std::runtime_error("Error: Invalid index");
 	// check if file extension is html
-	if (filePath.substr(filePath.find_last_of(".") + 1) != "html") throw std::runtime_error("Error: Invalid index");
+	// if (filePath.substr(filePath.find_last_of(".") + 1) != "html") throw std::runtime_error("Error: Invalid index");
 	return (filePath);
 }
 

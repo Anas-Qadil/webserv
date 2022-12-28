@@ -41,4 +41,5 @@ std::vector<std::string> getAllowedMethods(std::string str);
 bool hasValidBraces(const std::string& str);
 std::vector<std::string> getRedirect(std::string line);
 std::string getFastCgiPass(std::string line);
+std::string getCgiBin(std::string line);
 std::vector<std::string> getErrorPageContent(std::string line);

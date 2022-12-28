@@ -232,6 +232,9 @@ void parseServerContent(std::string &content, Config &server) {
 		} else if (line.find("error_page") != std::string::npos) {
 			std::vector<std::string> errorData = getErrorPageContent(line.substr(line.find("error_page") + 11));
 			errorPage[errorData[0]] = errorData[1];
+		} else if (line.find("allowed_methods") != std::string::npos) {
+			std::vector<std::string> allowedMethods = getAllowedMethods(line.substr(line.find("allowed_methods") + 16));
+			server.setAllowedMethods(allowedMethods);
 		}
 	}
 	server.setErrorPage(errorPage);
@@ -336,9 +339,22 @@ void analyzeLocationContent(std::string location, Config &server) {
 		} else if (line.find("fastcgi_pass") != std::string::npos) {
 			std::string fastcgi_pass = getFastCgiPass(line.substr(line.find("fastcgi_pass") + 13));
 			loca[path].setFastcgiPass(fastcgi_pass);
+		} else if (line.find("cgi_bin") != std::string::npos) {
+			std::string cgi_bin = getCgiBin(line.substr(line.find("cgi_bin") + 8));
+			loca[path].setCgiBin(cgi_bin);
 		}
 	}
 	server.setLocation(path, loca[path]);
+}
+
+std::string getCgiBin(std::string line) {
+		// check ; at the end
+	if (line[line.length() - 1] != ';') throw std::runtime_error("Error: Missing ; at the end of location");
+	// remove ; at the end
+	line.erase(line.length() - 1, 1);
+	// check if there is only 1 element
+	if (line.find(" ") != std::string::npos) throw std::runtime_error("Error: Invalid location path");
+	return (line);
 }
 
 std::string getFastCgiPass(std::string line) {

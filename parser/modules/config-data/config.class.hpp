@@ -12,10 +12,9 @@ class Config {
 		std::string host;
 		int	client_max_body_size;
 		std::string root;
+		std::vector<std::string> allow_methods;
 
 	public:
-		std::string ss;
-		std::string ss2;
 		
 		Config(); // default constructor
 		~Config(); // destructor
@@ -29,6 +28,7 @@ class Config {
 		int getClientMaxBodySize() const;
 		std::string getRoot() const;
 		std::map<std::string, std::string> getErrorPage() const;
+		std::vector<std::string> get_Methods() const;
 		
 		// setters
 		void setLocation(std::string locationPath, Location location);
@@ -38,6 +38,7 @@ class Config {
 		void setClientMaxBodySize(int client_max_body_size);
 		void setRoot(std::string root);
 		void setErrorPage(std::map<std::string, std::string> error_page);
+		void setAllowedMethods(std::vector<std::string> allow_methods);
 
 		// other methods
 		void print() const;

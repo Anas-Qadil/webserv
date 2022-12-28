@@ -1,5 +1,6 @@
 #include <iostream>
 #include "./config.class.hpp"
+#include <set>
 
 Config::Config() {
 	// fill with default values
@@ -16,8 +17,7 @@ Config::Config(const Config &config) {
 	this->client_max_body_size = config.client_max_body_size;
 	this->root = config.root;
 	this->error_page = config.error_page;
-	this->ss = config.ss;
-	this->ss2 = config.ss2;
+	this->allow_methods = config.allow_methods;
 }
 
 // getters
@@ -43,6 +43,9 @@ std::map<std::string, std::string> Config::getErrorPage() const {
 	std::cout << "error page size: " << this->error_page.size() << std::endl;
 	return this->error_page;
 }
+std::vector<std::string> Config::get_Methods() const {
+	return this->allow_methods;
+}
 
 // setters
 void Config::setLocation(std::string locationPath, Location location) {
@@ -51,22 +54,44 @@ void Config::setLocation(std::string locationPath, Location location) {
 	this->location[locationPath] = location;
 }
 void Config::setPort(std::vector<int> port) {
+	// check if port already exists
+	if (this->port.size() > 0)
+		throw std::runtime_error("error: You can only set port once");
 	this->port = port;
 }
 void Config::setServerName(std::vector<std::string> server_name) {
+	// check if server_name already exists
+	if (this->server_name.size() > 0)
+		throw std::runtime_error("error: You can only set server_name once");
 	this->server_name = server_name;
 }
 void Config::setHost(std::string host) {
 	this->host = host;
 }
 void Config::setClientMaxBodySize(int client_max_body_size) {
+	// check if client_max_body_size already exists
+	if (this->client_max_body_size > 0)
+		throw std::runtime_error("error: You can only set client_max_body_size once");
 	this->client_max_body_size = client_max_body_size;
 }
 void Config::setRoot(std::string root) {
+	// check if root already exists
+	if (this->root != "")
+		throw std::runtime_error("error: You can only set root once");
 	this->root = root;
 }
 void Config::setErrorPage(std::map<std::string, std::string> error_page) {
+	// check if error_page already exists
+	if (this->error_page.size() > 0)
+		throw std::runtime_error("error: You can only set error_page once");
+	// check if map has duplicate keys
 	this->error_page = error_page;
+}
+void Config::setAllowedMethods(std::vector<std::string> allow_methods) {
+	// check if allow_methods already exists
+	if (this->allow_methods.size() > 0)
+		throw std::runtime_error("error: You can only set allow_methods once");
+	this->allow_methods = allow_methods;
 }
 
 // other methods
@@ -85,6 +110,14 @@ void Config::print() const {
 		std::cout << *it << " ";
 	}
 	std::cout << std::endl;
+	// allow_methods
+	if (!this->allow_methods.empty()) {
+		std::cout << "allow_methods: ";
+		for (std::vector<std::string>::const_iterator it = this->allow_methods.begin(); it != this->allow_methods.end(); ++it) {
+			std::cout << *it << " ";
+		}
+		std::cout << std::endl;
+	}
 	std::cout << "host: " << this->host << std::endl;
 	std::cout << "client_max_body_size: " << this->client_max_body_size << std::endl;
 	std::cout << "root: " << this->root << std::endl;

@@ -201,6 +201,7 @@ void analyzeServerContent(std::string &content) {
 	if (content.find("root") == std::string::npos) throw std::runtime_error("Error: No root path found");
 	if (content.find("host") == std::string::npos) throw std::runtime_error("Error: No host found");
 	if (content.find("client_max_body_size") == std::string::npos) throw std::runtime_error("Error: No client max body size found");
+	if (content.find("allowed_methods") == std::string::npos) throw std::runtime_error("Error: No allowed methods found in server block");
 }
 
 void parseServerContent(std::string &content, Config &server) {

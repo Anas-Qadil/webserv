@@ -1,3 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   location.class.cpp                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aqadil <aqadil@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/08 10:18:25 by aqadil            #+#    #+#             */
+/*   Updated: 2023/01/08 10:18:26 by aqadil           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
+
 #include "./location.class.hpp"
 
 Location::Location() {
@@ -35,9 +49,11 @@ std::string Location::getLocationPath() const {
 	return this->locationPath;
 }
 std::string Location::getReturnPath() const {
+	std::cout << return_path << std::endl;
 	return this->return_path;
 }
 int Location::getReturnCode() const {
+	std::cout << return_code << std::endl;
 	return this->return_code;
 }
 std::string Location::getFastcgiPass() const {

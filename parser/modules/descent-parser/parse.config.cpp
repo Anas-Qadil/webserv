@@ -1,3 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.config.cpp                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aqadil <aqadil@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/08 10:19:05 by aqadil            #+#    #+#             */
+/*   Updated: 2023/01/08 10:26:51 by aqadil           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
+
 #include "./parse.config.hpp"
 
 std::vector<Config> descentParser(const std::string path) 
@@ -15,9 +29,9 @@ std::vector<Config> descentParser(const std::string path)
 		servers.push_back(server);
 	}
 	// print servers
-	for (size_t i = 0; i < servers.size(); i++) {
-		servers[i].print();
-	}
+	// for (size_t i = 0; i < servers.size(); i++) {
+	// 	servers[i].print();
+	// }
 	return (servers);
 }
 
@@ -71,7 +85,6 @@ const Config parseServer(std::string &serverContent) {
 	Config server = Config();
 	std::vector<int> ports;
 	std::string line;
-	size_t i = 0;
 	std::string location;
 
 	// get Location
@@ -202,6 +215,7 @@ void analyzeServerContent(std::string &content) {
 	if (content.find("host") == std::string::npos) throw std::runtime_error("Error: No host found");
 	if (content.find("client_max_body_size") == std::string::npos) throw std::runtime_error("Error: No client max body size found");
 	if (content.find("allowed_methods") == std::string::npos) throw std::runtime_error("Error: No allowed methods found in server block");
+
 }
 
 void parseServerContent(std::string &content, Config &server) {
@@ -257,7 +271,7 @@ std::vector<std::string> getErrorPageContent(std::string line) {
 	// get path
 	errorPage = line.substr(line.find(" ") + 1);
 	// check if error code is valid
-	if (errorCode != "404" && errorCode != "403" && errorCode != "500" && errorCode != "502") throw std::runtime_error("Error: Invalid error code");
+	// if (errorCode != "404" && errorCode != "403" && errorCode != "500" && errorCode != "502") throw std::runtime_error("Error: Invalid error code");
 	// check if path is valid
 	if (errorPage[0] != '/') throw std::runtime_error("Error: Invalid path");
 	// check if path is valid
@@ -529,6 +543,7 @@ bool analyzeRepeatedElements(std::vector<std::string> elements) {
 }
 
 void analyzeHostname(std::string &hostname) {
+	(void) hostname;
 	// validate hostname here ======>
 }
 
@@ -540,12 +555,12 @@ std::string getHostname(std::string line) {
 
 int getClientMaxBodySize(std::string line) {
 	try {
-		int clientMaxBodySize = 0;
+		size_t clientMaxBodySize = 0;
 		// check if client max body size is a number
 		for (size_t i = 0; i < line.length(); i++) {
 			if (!isdigit(line[i])) throw std::runtime_error("Error: Client max body size is not a number");
 		}
-		clientMaxBodySize = std::stoi(line);
+		clientMaxBodySize = (size_t)std::stoul(line);
 		// check if client max body size is valid
 		if (clientMaxBodySize < 0) throw std::runtime_error("Error: Client max body size is negative");
 		return (clientMaxBodySize);

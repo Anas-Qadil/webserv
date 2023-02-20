@@ -1,0 +1,15 @@
+<html>
+  <body>
+    <form id="delete-form" method="POST" action="/DELETE">
+      <input type="hidden" name="_method" value="DELETE">
+      <button type="submit">Delete</button>
+    </form>
+
+    <script>
+      const form = document.getElementById('delete-form');
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const request = new XMLHttpRequest();
+        request.open(form.method, form.action);
+       

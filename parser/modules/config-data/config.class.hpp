@@ -1,3 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   config.class.hpp                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aqadil <aqadil@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/08 10:18:37 by aqadil            #+#    #+#             */
+/*   Updated: 2023/01/08 10:21:18 by aqadil           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
+
 #include <iostream>
 #include <vector>
 #include "../location/location.class.hpp"
@@ -10,7 +24,7 @@ class Config {
 		std::vector<int> port;
 		std::vector<std::string> server_name;
 		std::string host;
-		int	client_max_body_size;
+		size_t	client_max_body_size;
 		std::string root;
 		std::vector<std::string> allow_methods;
 
@@ -25,7 +39,7 @@ class Config {
 		std::vector<int> getPort() const;
 		std::vector<std::string> getServerName() const;
 		std::string getHost() const;
-		int getClientMaxBodySize() const;
+		size_t getClientMaxBodySize() const;
 		std::string getRoot() const;
 		std::map<std::string, std::string> getErrorPage() const;
 		std::vector<std::string> get_Methods() const;
@@ -35,7 +49,7 @@ class Config {
 		void setPort(std::vector<int> port);
 		void setServerName(std::vector<std::string> server_name);
 		void setHost(std::string host);
-		void setClientMaxBodySize(int client_max_body_size);
+		void setClientMaxBodySize(size_t client_max_body_size);
 		void setRoot(std::string root);
 		void setErrorPage(std::map<std::string, std::string> error_page);
 		void setAllowedMethods(std::vector<std::string> allow_methods);

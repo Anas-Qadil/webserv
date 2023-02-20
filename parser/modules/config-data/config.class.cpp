@@ -1,3 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   config.class.cpp                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: aqadil <aqadil@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/01/08 10:18:32 by aqadil            #+#    #+#             */
+/*   Updated: 2023/01/08 10:22:08 by aqadil           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
+
 #include <iostream>
 #include "./config.class.hpp"
 #include <set>
@@ -33,14 +47,14 @@ std::vector<std::string> Config::getServerName() const {
 std::string Config::getHost() const {
 	return this->host;
 }
-int Config::getClientMaxBodySize() const {
+size_t Config::getClientMaxBodySize() const {
 	return this->client_max_body_size;
 }
 std::string Config::getRoot() const {
 	return this->root;
 }
 std::map<std::string, std::string> Config::getErrorPage() const {
-	std::cout << "error page size: " << this->error_page.size() << std::endl;
+	// std::cout << "error page size: " << this->error_page.size() << std::endl;
 	return this->error_page;
 }
 std::vector<std::string> Config::get_Methods() const {
@@ -68,7 +82,7 @@ void Config::setServerName(std::vector<std::string> server_name) {
 void Config::setHost(std::string host) {
 	this->host = host;
 }
-void Config::setClientMaxBodySize(int client_max_body_size) {
+void Config::setClientMaxBodySize(size_t client_max_body_size) {
 	// check if client_max_body_size already exists
 	if (this->client_max_body_size > 0)
 		throw std::runtime_error("error: You can only set client_max_body_size once");

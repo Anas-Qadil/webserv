@@ -87,5 +87,19 @@ In the configuration file, you should be able to:
  
  To compile and run this program, you will need a `C++` compiler such as g++ and the `make` build tool installed on your system.
  1. Clone this repository to your local machine using ```git clone https://github.com/Anas-Qadil/webserv.git```
+ 2. Navigate to the project directory: cd webserv
+ 3. Run make to compile the program.
+ 4. Run the program with the command ./webserv [configuration file]
  
+ Note: The program requires a configuration file to be specified as an argument. If none is provided, it will attempt to use the default configuration file located at ./config/default.conf.
+
+Once the program is running, you can test it by opening a web browser and navigating to http://localhost:<port>, where <port> is the port number specified in the configuration file.
+ 
+## Contributing
+
+If you would like to contribute to this project, please fork the repository and make your changes. Then, submit a pull request with your changes. Thank you for your contributions!
+ 
+## License
+ 
+This project is licensed under the MIT License.
 

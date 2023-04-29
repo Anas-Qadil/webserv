@@ -82,4 +82,10 @@ In the configuration file, you should be able to:
   You must provide some configuration files and default basic files to test and demonstrate every feature works during evaluation
   • Support cookies and session management (prepare quick examples).
   • Handle multiple CGI.
+ 
+ ## Installation
+ 
+ To compile and run this program, you will need a `C++` compiler such as g++ and the `make` build tool installed on your system.
+ 1. Clone this repository to your local machine using ```git clone https://github.com/Anas-Qadil/webserv.git```
+ 
 

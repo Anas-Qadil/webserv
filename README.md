@@ -93,7 +93,7 @@ In the configuration file, you should be able to:
  
  Note: The program requires a configuration file to be specified as an argument. If none is provided, it will attempt to use the default configuration file located at ./config/default.conf.
 
-Once the program is running, you can test it by opening a web browser and navigating to http://localhost:<port>, where <port> is the port number specified in the configuration file.
+Once the program is running, you can test it by opening a web browser and navigating to ```http://localhost:<port>```, where <port> is the port number specified in the configuration file.
  
 ## Contributing
 

@@ -22,7 +22,7 @@ While the primary function is to serve content, full implementation of HTTP also
   *  Any external library and Boost libraries are forbidden.
 
 ## III.1 Mandatory part
-  • Your program has to take a configuration file as argument, or use a default path.
+  • Your program has to take a configuration file as argument, or use a default path.<br>
   • You can’t execve another web server.
   • Your server must never block and the client can be bounced properly if necessary.
   • It must be non-blocking and use only 1 poll() (or equivalent) for all the I/O

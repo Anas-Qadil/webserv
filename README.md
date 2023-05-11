@@ -48,27 +48,27 @@ equivalent).<br>
 
 ## III.3 Configuration file
 
-In the configuration file, you should be able to:
-  • Choose the port and host of each ’server’.
-  • Setup the server_names or not.
+In the configuration file, you should be able to:<br>
+  • Choose the port and host of each ’server’.<br>
+  • Setup the server_names or not.<br>
   • The first server for a host:port will be the default for this host:port (that means
-  it will answer to all the requests that don’t belong to an other server).
-  • Setup default error pages.
-  • Limit client body size.
+  it will answer to all the requests that don’t belong to an other server).<br>
+  • Setup default error pages.<br>
+  • Limit client body size.<br><br>
   • Setup routes with one or multiple of the following rules/configuration (routes wont
-  be using regexp):
-    ◦ Define a list of accepted HTTP methods for the route.
-    ◦ Define a HTTP redirection.
+  be using regexp):<br>
+    ◦ Define a list of accepted HTTP methods for the route.<br>
+    ◦ Define a HTTP redirection.<br>
     ◦ Define a directory or a file from where the file should be searched (for example,
     if url /kapouet is rooted to /tmp/www, url /kapouet/pouic/toto/pouet is
-    /tmp/www/pouic/toto/pouet).
-    ◦ Turn on or off directory listing.
-    7
-    Webserv This is when you finally understand why a URL starts with HTTP
-    ◦ Set a default file to answer if the request is a directory.
-    ◦ Execute CGI based on certain file extension (for example .php).
-    ◦ Make it work with POST and GET methods.
-    ◦ Make the route able to accept uploaded files and configure where they should
+    /tmp/www/pouic/toto/pouet).<br>
+    ◦ Turn on or off directory listing.<br>
+## Web Server Basic Functionality
+Webserv This is when you finally understand why a URL starts with HTTP
+  ◦ Set a default file to answer if the request is a directory.
+  ◦ Execute CGI based on certain file extension (for example .php).
+  ◦ Make it work with POST and GET methods.
+  ◦ Make the route able to accept uploaded files and configure where they should
     be saved.
   ∗ Do you wonder what a CGI is?
   ∗ Because you won’t call the CGI directly, use the full path as PATH_INFO.

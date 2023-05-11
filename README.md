@@ -63,24 +63,22 @@ In the configuration file, you should be able to:<br>
     if url /kapouet is rooted to /tmp/www, url /kapouet/pouic/toto/pouet is
     /tmp/www/pouic/toto/pouet).<br>
     ◦ Turn on or off directory listing.<br>
-## Web Server Basic Functionality
-Webserv This is when you finally understand why a URL starts with HTTP
-  ◦ Set a default file to answer if the request is a directory.
-  ◦ Execute CGI based on certain file extension (for example .php).
-  ◦ Make it work with POST and GET methods.
+  ◦ Set a default file to answer if the request is a directory.<br>
+  ◦ Execute CGI based on certain file extension (for example .php).<br>
+  ◦ Make it work with POST and GET methods.<br>
   ◦ Make the route able to accept uploaded files and configure where they should
-    be saved.
-  ∗ Do you wonder what a CGI is?
-  ∗ Because you won’t call the CGI directly, use the full path as PATH_INFO.
+    be saved.<br>
+  ∗ Do you wonder what a CGI is?<br>
+  ∗ Because you won’t call the CGI directly, use the full path as PATH_INFO.<br>
   ∗ Just remember that, for chunked request, your server needs to unchunk
-  it, the CGI will expect EOF as end of the body.
+  it, the CGI will expect EOF as end of the body.<br>
   ∗ Same things for the output of the CGI. If no content_length is returned
-  from the CGI, EOF will mark the end of the returned data.
-  ∗ Your program should call the CGI with the file requested as first argument.
-  ∗ The CGI should be run in the correct directory for relative path file access.
-  ∗ Your server should work with one CGI (php-CGI, Python, and so forth).
-  You must provide some configuration files and default basic files to test and demonstrate every feature works during evaluation
-  • Support cookies and session management (prepare quick examples).
+  from the CGI, EOF will mark the end of the returned data.<br>
+  ∗ Your program should call the CGI with the file requested as first argument.<br>
+  ∗ The CGI should be run in the correct directory for relative path file access.<br>
+  ∗ Your server should work with one CGI (php-CGI, Python, and so forth).<br>
+  You must provide some configuration files and default basic files to test and demonstrate every feature works during evaluation<br>
+  • Support cookies and session management (prepare quick examples).<br>
   • Handle multiple CGI.
  
  ## Installation

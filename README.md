@@ -54,7 +54,7 @@ In the configuration file, you should be able to:<br>
   • The first server for a host:port will be the default for this host:port (that means
   it will answer to all the requests that don’t belong to an other server).<br>
   • Setup default error pages.<br>
-  • Limit client body size.<br><br>
+  • Limit client body size.<br>
   • Setup routes with one or multiple of the following rules/configuration (routes wont
   be using regexp):<br>
     ◦ Define a list of accepted HTTP methods for the route.<br>

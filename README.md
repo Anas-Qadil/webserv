@@ -98,6 +98,6 @@ Once the program is running, you can test it by opening a web browser and naviga
 If you would like to contribute to this project, please fork the repository and make your changes. Then, submit a pull request with your changes. Thank you for your contributions!
  
 ## License
- 
-This project is licensed under the MIT License.
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
